@@ -1,10 +1,11 @@
-import logo from './logo.svg';
+
 import './App.css';
 import React, {useState} from 'react'
 import {Navbar, Container, Nav, Card, Button} from 'react-bootstrap'
 import Data from './data'
 import { Link, Route, Switch} from 'react-router-dom'
 import Detail from './Detail'
+import axios from 'axios'
 
 
 function App() {
@@ -23,7 +24,6 @@ function Card1(props) {
 }
 
 
-
   return (
 
     <div className="App">
@@ -33,8 +33,8 @@ function Card1(props) {
     <Container>
     <Navbar.Brand> Shop </Navbar.Brand>
     <Nav className="me-auto">
-      <Nav.Link> <Link to='/'> Home </Link></Nav.Link>
-      <Nav.Link> <Link to='/Detail'> Detail </Link></Nav.Link>
+      <Nav.Link as={Link} to='/'> Home</Nav.Link>
+      <Nav.Link as = {Link} to='/Detail'> Detail</Nav.Link>
       <Nav.Link href="#pricing">Pricing</Nav.Link>
     </Nav>
     </Container>
@@ -67,22 +67,31 @@ function Card1(props) {
             shoes.map( (a,i)=>{ return <Card1 shoes={shoes[i]} i={i}></Card1> })
           }
         </div>
+
+
+{/* json새로 만들거 gist.github꺼임 https://gist.githubusercontent.com/HJ-C/269c10929a3a6e3c8f421b6a7d7fd281/raw/1785b90820fd314ab1b3201f260298682c1652f8/gistfile1.txt */}
+
+          <button className="btn btn-primary" onClick={ ()=>{
+            axios.get('https://codingapple1.github.io/shop/data2.json')
+            .then(()=>{ 요청 성공시 코드})
+            .catch(()=> { 요청 실패시 코드})
+          }}>더보기</button>
+
       </div>
 
     </Route>
 
 
-    <Route path = '/detail'>
-      <Detail></Detail>
+    <Route path='/Detail/:id'>
+      <Detail shoes={shoes}></Detail>
     </Route>
-    
-    <Route path='/:id'>
-      <div>새로만든 라우트 입니다.</div>
-    </Route>
+
     </Switch>
-
-
+    
+    
     </div>
+
+    
   );
 }
 
