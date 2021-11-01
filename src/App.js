@@ -3,25 +3,28 @@ import './App.css';
 import React, {useState} from 'react'
 import {Navbar, Container, Nav, Card, Button} from 'react-bootstrap'
 import Data from './data'
-import { Link, Route, Switch} from 'react-router-dom'
+import { Link, Route, Switch, useHistory} from 'react-router-dom'
 import Detail from './Detail'
 import axios from 'axios'
+import Cart from './Cart'
 
 
 function App() {
 
   let [shoes, setshoes] = useState(Data)
-
+  let [inven, setinven] = useState([1,1,1])
+  let history = useHistory()
 
 function Card1(props) {
   return (
-    <div className="col-md-4">
-    <img src = {"https://codingapple1.github.io/shop/shoes" + (props.i+1) +".jpg"} width="100%"></img>
+    <div className="col-md-4" onClick={()=>{ history.push('/detail/' + props.i)}}>
+    <img src = {"/shoes/shoes" + (props.i+1) +".jpg"} width="100%"></img>
     <h4>{props.shoes.title}</h4>
     <p>{props.shoes.content} & {props.shoes.price}</p>
   </div>
   )
 }
+
 
 
   return (
@@ -35,7 +38,7 @@ function Card1(props) {
     <Nav className="me-auto">
       <Nav.Link as={Link} to='/'> Home</Nav.Link>
       <Nav.Link as = {Link} to='/Detail'> Detail</Nav.Link>
-      <Nav.Link href="#pricing">Pricing</Nav.Link>
+      <Nav.Link as = {Link} to ='/Cart'> Cart</Nav.Link>
     </Nav>
     </Container>
   </Navbar>
@@ -69,12 +72,12 @@ function Card1(props) {
         </div>
 
 
-{/* json새로 만들거 gist.github꺼임 https://gist.githubusercontent.com/HJ-C/269c10929a3a6e3c8f421b6a7d7fd281/raw/1785b90820fd314ab1b3201f260298682c1652f8/gistfile1.txt */}
+{/* json서버 생성 gist.github https://gist.githubusercontent.com/HJ-C/269c10929a3a6e3c8f421b6a7d7fd281/raw/1785b90820fd314ab1b3201f260298682c1652f8/gistfile1.txt */}
 
           <button className="btn btn-primary" onClick={ ()=>{
-            axios.get('https://codingapple1.github.io/shop/data2.json')
-            .then(()=>{ 요청 성공시 코드})
-            .catch(()=> { 요청 실패시 코드})
+            axios.get('https://gist.githubusercontent.com/HJ-C/269c10929a3a6e3c8f421b6a7d7fd281/raw/1785b90820fd314ab1b3201f260298682c1652f8/gistfile1.txt')
+            .then((result)=>{{setshoes([...shoes, ...result.data])}})
+            .catch(()=> {})
           }}>더보기</button>
 
       </div>
@@ -83,7 +86,11 @@ function Card1(props) {
 
 
     <Route path='/Detail/:id'>
-      <Detail shoes={shoes}></Detail>
+      <Detail shoes={shoes} inven={inven} setinven={setinven}></Detail>
+    </Route>
+    
+    <Route path='/Cart'>
+      <Cart></Cart>
     </Route>
 
     </Switch>
